@@ -23,9 +23,12 @@ public class User : BaseAuditableEntity
 
         return new User
         {
-            Email = email.Trim().ToLowerInvariant(),
+            Email = NormalizeEmail(email),
             PasswordHash = passwordHash,
             Role = role
         };
     }
+
+    public static string NormalizeEmail(string email) =>
+        email.Trim().ToLowerInvariant();
 }
