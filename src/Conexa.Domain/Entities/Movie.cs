@@ -3,9 +3,8 @@ using Conexa.Domain.ValueObjects;
 
 namespace Conexa.Domain.Entities;
 
-public class Movie
+public class Movie : BaseAuditableEntity
 {
-    public int Id { get; private set; }
     public string Title { get; private set; } = string.Empty;
     public int? EpisodeId { get; private set; }
     public string? OpeningCrawl { get; private set; }
@@ -13,8 +12,6 @@ public class Movie
     public string? Producer { get; private set; }
     public DateOnly? ReleaseDate { get; private set; }
     public string? ExternalUrl { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime? UpdatedAt { get; private set; }
 
     public bool IsFromExternalSource => ExternalUrl is not null;
 
@@ -22,7 +19,7 @@ public class Movie
 
     public static Movie Create(MovieDetails details)
     {
-        var movie = new Movie { CreatedAt = DateTime.UtcNow };
+        var movie = new Movie();
         return movie.Apply(details);
     }
 
@@ -31,19 +28,11 @@ public class Movie
         if (string.IsNullOrWhiteSpace(externalUrl))
             throw new DomainException("External url is required for imported movies.");
 
-        var movie = new Movie
-        {
-            ExternalUrl = externalUrl,
-            CreatedAt = DateTime.UtcNow
-        };
+        var movie = new Movie { ExternalUrl = externalUrl };
         return movie.Apply(details);
     }
 
-    public void UpdateDetails(MovieDetails details)
-    {
-        Apply(details);
-        UpdatedAt = DateTime.UtcNow;
-    }
+    public void UpdateDetails(MovieDetails details) => Apply(details);
 
     public bool SyncWith(MovieDetails details)
     {
@@ -53,7 +42,6 @@ public class Movie
         if (CurrentDetails() == details) return false;
 
         Apply(details);
-        UpdatedAt = DateTime.UtcNow;
         return true;
     }
 

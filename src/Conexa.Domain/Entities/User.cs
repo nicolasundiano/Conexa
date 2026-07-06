@@ -3,13 +3,11 @@ using Conexa.Domain.Enums;
 
 namespace Conexa.Domain.Entities;
 
-public class User
+public class User : BaseAuditableEntity
 {
-    public int Id { get; private set; }
     public string Email { get; private set; } = string.Empty;
     public string PasswordHash { get; private set; } = string.Empty;
     public UserRole Role { get; private set; }
-    public DateTime CreatedAt { get; private set; }
 
     private User() { }
 
@@ -27,8 +25,7 @@ public class User
         {
             Email = email.Trim().ToLowerInvariant(),
             PasswordHash = passwordHash,
-            Role = role,
-            CreatedAt = DateTime.UtcNow
+            Role = role
         };
     }
 }
