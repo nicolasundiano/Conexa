@@ -33,7 +33,7 @@ public static class DependencyInjection
 
         services.AddDbContext<AppDbContext>((serviceProvider, options) =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString, npgsql => npgsql.EnableRetryOnFailure());
             options.UseSnakeCaseNamingConvention();
             options.AddInterceptors(serviceProvider.GetRequiredService<AuditableEntityInterceptor>());
         });
