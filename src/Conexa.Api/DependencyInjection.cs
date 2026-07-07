@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 namespace Conexa.Api;
@@ -68,7 +69,22 @@ public static class DependencyInjection
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Conexa Movies API", Version = "v1" });
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Conexa Movies API",
+                Version = "v1",
+                Description =
+                    "API de gestión de películas con datos de la Star Wars API (SWAPI).\n\n" +
+                    "**Autenticación:** registrate o logueate en `/api/auth`, copiá el `accessToken` " +
+                    "y usá el botón **Authorize** (arriba a la derecha) para autorizar las peticiones.\n\n" +
+                    "**Roles:** el detalle de una película (`GET /api/movies/{id}`) es exclusivo de usuarios " +
+                    "**Regular**; crear, actualizar, eliminar y sincronizar son exclusivos de **Admin**."
+            });
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            if (File.Exists(xmlPath))
+                options.IncludeXmlComments(xmlPath);
 
             var scheme = new OpenApiSecurityScheme
             {
