@@ -4,7 +4,7 @@ using FluentValidation;
 namespace Conexa.Application.Movies.Common;
 
 public abstract class MovieDetailsCommandValidator<TCommand> : AbstractValidator<TCommand>
-    where TCommand : IMovieDetailsCommand
+    where TCommand : IMovieDetailsSource
 {
     protected MovieDetailsCommandValidator()
     {

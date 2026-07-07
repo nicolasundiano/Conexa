@@ -9,4 +9,4 @@ public record CreateMovieCommand(
     string? OpeningCrawl,
     string? Director,
     string? Producer,
-    DateOnly? ReleaseDate) : IRequest<MovieDto>, IMovieDetailsCommand;
+    DateOnly? ReleaseDate) : IRequest<MovieDto>, IMovieDetailsSource;

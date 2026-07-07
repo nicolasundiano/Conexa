@@ -1,6 +1,6 @@
 namespace Conexa.Application.Movies.Common;
 
-public interface IMovieDetailsCommand
+public interface IMovieDetailsSource
 {
     string Title { get; }
     int? EpisodeId { get; }

@@ -1,3 +1,5 @@
+using Conexa.Application.Movies.Common;
+
 namespace Conexa.Application.Common.Interfaces;
 
 public record SwapiFilm(
@@ -7,7 +9,7 @@ public record SwapiFilm(
     string? Director,
     string? Producer,
     DateOnly? ReleaseDate,
-    string Url);
+    string Url) : IMovieDetailsSource;
 
 public interface ISwapiClient
 {
