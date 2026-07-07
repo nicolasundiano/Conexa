@@ -9,7 +9,7 @@ public record SwapiFilm(
     string? Director,
     string? Producer,
     DateOnly? ReleaseDate,
-    string Url) : IMovieDetailsSource;
+    string? Url) : IMovieDetailsSource;
 
 public interface ISwapiClient
 {
