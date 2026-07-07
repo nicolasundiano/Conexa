@@ -1,4 +1,5 @@
 using Conexa.Api.Contracts;
+using Conexa.Application.Common.Pagination;
 using Conexa.Application.Movies.Commands.CreateMovie;
 using Conexa.Application.Movies.Commands.DeleteMovie;
 using Conexa.Application.Movies.Commands.SyncMovies;
@@ -19,9 +20,12 @@ namespace Conexa.Api.Controllers;
 public class MoviesController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<MovieListItemDto>>> GetMovies(CancellationToken cancellationToken)
+    public async Task<ActionResult<PagedList<MovieListItemDto>>> GetMovies(
+        [FromQuery] int page = 1,
+        [FromQuery] int? pageSize = null,
+        CancellationToken cancellationToken = default)
     {
-        return Ok(await sender.Send(new GetMoviesQuery(), cancellationToken));
+        return Ok(await sender.Send(new GetMoviesQuery(page, pageSize), cancellationToken));
     }
 
     [HttpGet("{id:int}")]

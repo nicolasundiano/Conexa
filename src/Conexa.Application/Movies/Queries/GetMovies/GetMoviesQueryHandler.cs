@@ -1,4 +1,5 @@
 using Conexa.Application.Common.Interfaces;
+using Conexa.Application.Common.Pagination;
 using Conexa.Application.Movies.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -6,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Conexa.Application.Movies.Queries.GetMovies;
 
 public class GetMoviesQueryHandler(IApplicationDbContext context)
-    : IRequestHandler<GetMoviesQuery, List<MovieListItemDto>>
+    : IRequestHandler<GetMoviesQuery, PagedList<MovieListItemDto>>
 {
-    public async Task<List<MovieListItemDto>> Handle(GetMoviesQuery query, CancellationToken cancellationToken)
+    public async Task<PagedList<MovieListItemDto>> Handle(GetMoviesQuery query, CancellationToken cancellationToken)
     {
         return await context.Movies
             .AsNoTracking()
@@ -16,6 +17,6 @@ public class GetMoviesQueryHandler(IApplicationDbContext context)
             .ThenBy(m => m.EpisodeId)
             .ThenBy(m => m.Title)
             .Select(m => new MovieListItemDto(m.Id, m.Title, m.EpisodeId, m.Director, m.ReleaseDate))
-            .ToListAsync(cancellationToken);
+            .ToPagedListAsync(query.Page, query.PageSize, cancellationToken);
     }
 }
