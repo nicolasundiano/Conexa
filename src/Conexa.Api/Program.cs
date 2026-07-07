@@ -1,23 +1,20 @@
+using Conexa.Api;
+using Conexa.Application;
+using Conexa.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration)
+    .AddPresentation();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+await app.InitializeDatabaseAsync();
 
-app.UseHttpsRedirection();
+app.ConfigureRequestPipeline();
 
-app.UseAuthorization();
+await app.RunAsync();
 
-app.MapControllers();
-
-app.Run();
+public partial class Program;

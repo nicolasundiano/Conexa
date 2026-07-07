@@ -40,6 +40,11 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<AppDbContext>());
 
+        services.AddOptions<SeedOptions>()
+            .Bind(configuration.GetSection(SeedOptions.SectionName));
+
+        services.AddScoped<DatabaseInitializer>();
+
         return services;
     }
 
